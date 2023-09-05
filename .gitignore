@@ -7,3 +7,5 @@ poetry.lock
 
 .DS_Store
 
+*/migrations/*
+!*/migrations/__init__.py
