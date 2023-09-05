@@ -1,0 +1,9 @@
+venv*
+.env
+
+pyrightconfig.json
+
+poetry.lock
+
+.DS_Store
+

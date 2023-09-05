@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "TestTask"
+version = "0.1.0"
+description = ""
+authors = ["moonvent"]
+readme = "README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[tool.poetry.group.tests.dependencies]
+pytest = "^7.4.1"
+
+
+[tool.poetry.group.development_tools.dependencies]
+debugpy = "^1.6.7.post1"
+loguru = "^0.7.1"
+
+
+[tool.poetry.group.main_libraries.dependencies]
+django = "^4.2.5"
+djangorestframework = "^3.14.0"
+psycopg2 = "^2.9.7"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
