@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class _EnvVar(BaseSettings):
     """
-        Класс описывающий загрузку переенных окружения
+        Класс описывающий загрузку переменных окружения
     """
     model_config = SettingsConfigDict(env_file=ENV_FILE_NAME, 
                                       env_file_encoding=ENV_FILE_ENCODING)

@@ -8,6 +8,9 @@ class User(models.Model):
 
 
 class Note(models.Model):
+    class Meta:
+        ordering = ('-created_at',)
+
     title = models.CharField(max_length=FieldLength.NOTE_TITLE)
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -18,15 +21,18 @@ class Note(models.Model):
 class Achievement(models.Model):
     title = models.CharField(max_length=FieldLength.ACHIEVEMENT_TITLE)
     condition = models.TextField()
-    icon = models.ImageField(upload_to=FoldersPath.ACHIEVEMENT_ICONS)
+    icon = models.ImageField(upload_to=FoldersPath.ACHIEVEMENT_ICONS.value)
     user = models.ManyToManyField(User,
                                   related_name='achievements')
 
 
 class Advertisement(models.Model):
+    class Meta:
+        ordering = ('-published_at',)
+
     title = models.CharField(max_length=FieldLength.ADVERTISEMENT_TITLE)
     description = models.TextField()
-    image = models.ImageField(upload_to=FoldersPath.ADVERTISEMENT_IMAGES)
+    image = models.ImageField(upload_to=FoldersPath.ADVERTISEMENT_IMAGES.value)
     link = models.URLField()
     published_at = models.DateTimeField(auto_now_add=True)
 

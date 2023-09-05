@@ -9,3 +9,8 @@ poetry.lock
 
 */migrations/*
 !*/migrations/__init__.py
+
+
+media/*
+
+*/__pycache__/*
