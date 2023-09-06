@@ -1,10 +1,13 @@
 from constants.user_feed.models import FieldLength, FoldersPath
 from django.db import models
+from django.contrib.auth.models import User as DjangoUser
 
 
 class User(models.Model):
     first_name = models.CharField(max_length=FieldLength.USER_FIRST_NAME)
     last_name = models.CharField(max_length=FieldLength.USER_LAST_NAME)
+    django_user = models.ForeignKey(DjangoUser,
+                                    on_delete=models.CASCADE)
 
 
 class Note(models.Model):

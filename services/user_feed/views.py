@@ -1,5 +1,6 @@
 from itertools import zip_longest
-from typing import Optional, Union
+from typing import Optional
+from constants.user_feed.views import Alias
 
 from user_feed.models import Achievement, Advertisement, Note
 
@@ -30,7 +31,7 @@ def get_feed_filter_data(user_id: int,
 
 def get_sorted_feed(notes: list[Note],
                     achievements: list[Achievement],
-                    ads: list[Advertisement]) -> list[Note | Achievement | Advertisement]:
+                    ads: list[Advertisement]) -> Alias.FeedList:
     """
         Распределение контента, а именно 1 новость, 1 ачивка, 1 реклама, 
             чтоб не было одноготипного контента

@@ -3,7 +3,10 @@ from user_feed import views
 
 
 urlpatterns = [
-     path('users/<int:pk>/', 
+     path('feed/', 
           views.FeedView.as_view(),
           name='feed'),
+     path('login/', 
+          views.auth_view,
+          name='login'),
 ]

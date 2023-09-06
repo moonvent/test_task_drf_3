@@ -1,7 +1,10 @@
+from django.contrib.auth import login
+from django.core.handlers.asgi import HttpResponse
+from django.core.handlers.wsgi import WSGIRequest
 from rest_framework import generics
-from constants.user_feed.views import QueryParam
-from services.user_feed.views import get_feed_filter_data, get_sorted_feed
-from user_feed.models import Note, Achievement, Advertisement
+from rest_framework.exceptions import NotAuthenticated
+from constants.user_feed.views import Alias, QueryParam
+from services.user_feed.models import get_django_user, get_models_for_feed
 from user_feed.paginators import FeedPagination
 from user_feed.serializers import FeedSerializer
 
@@ -13,22 +16,30 @@ class FeedView(generics.ListAPIView):
     serializer_class = FeedSerializer
     pagination_class = FeedPagination
 
-    def get_queryset(self):
-        user_id = self.kwargs.get('pk')
+    def get_queryset(self) -> Alias.FeedList:
+        if not self.request.user.is_authenticated:
+            raise NotAuthenticated
+
+        user_id = self.request.user.id
         search = self.request.query_params.get(QueryParam.Search)
 
-        filter_data_for_notes, filter_data_for_achievements = get_feed_filter_data(user_id=user_id,
-                                                                                   search=search)
-
-        notes = Note.objects.filter(**filter_data_for_notes)
-        
-        achievements = Achievement.objects.filter(**filter_data_for_achievements)
-
-        ads = Advertisement.objects.all()
-
-        feed = get_sorted_feed(notes=notes,
-                               achievements=achievements,
-                               ads=ads)
+        feed = get_models_for_feed(user_id=user_id,
+                                   search=search)  
 
         return feed
+
+
+def auth_view(request: WSGIRequest) -> HttpResponse:
+    """
+        Ручка для быстрой авторизации
+    """
+    user_id = request.GET.get('user_id')
+    django_user = get_django_user(user_id=user_id)
+
+    login(request, 
+          django_user)
+
+    return HttpResponse('Logged in')
+
+
 
