@@ -31,7 +31,6 @@ class FeedView(generics.ListAPIView):
 
         search = self.request.query_params.get(QueryParam.Search)
 
-        logger.debug('Получаю данные из бд')
         feed = get_models_for_feed(user_id=user_id,
                                    search=search)  
 
@@ -46,12 +45,11 @@ def auth_view(request: WSGIRequest) -> HttpResponse:
     """
     user_id = request.GET.get('user_id')
     
-
     if django_user := get_django_user(user_id=user_id):
 
         if request.user.is_authenticated:
             logout(request)
-
+        
         login(request, 
               django_user)
 

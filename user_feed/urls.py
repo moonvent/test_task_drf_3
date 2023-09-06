@@ -17,6 +17,8 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
+    # описание свагера тут, так как текущее приложение отвечает за апи, 
+    # следовательно и в нём будет дока и свагер по этому апи
     schema_view = get_schema_view(
         openapi.Info(
             title="TestTask",

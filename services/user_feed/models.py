@@ -1,7 +1,7 @@
 from typing import Optional
 from constants.user_feed.views import Alias
 from services.user_feed.views import get_feed_filter_data, get_sorted_feed
-from user_feed.models import Achievement, Advertisement, Note, User, DjangoUser
+from user_feed.models import Achievement, Advertisement, Note, User
 
 
 def get_models_for_feed(user_id: int,
@@ -24,7 +24,7 @@ def get_models_for_feed(user_id: int,
     return feed
 
 
-def get_django_user(user_id: int) -> Optional[DjangoUser]:
+def get_django_user(user_id: int) -> Optional[User]:
     """
         Получение сущности пользователя из Джанго ауф системы
     """
@@ -34,6 +34,6 @@ def get_django_user(user_id: int) -> Optional[DjangoUser]:
     )
 
     if users:
-        django_user = users.first()
-        return django_user
+        user = users.first()
+        return user
 

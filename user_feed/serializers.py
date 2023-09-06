@@ -1,4 +1,7 @@
 from rest_framework import serializers
+from constants.user_feed.serializers import EventMessages
+from constants.user_feed.views import Alias
+from exceptions.user_feed.serializers import NotCorrectFeedType
 from user_feed.models import Achievement, Advertisement, Note
 
 
@@ -34,18 +37,45 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 class FeedSerializer(serializers.Serializer):
 
     model_type = serializers.SerializerMethodField()
+    event_message = serializers.SerializerMethodField()
     details = serializers.SerializerMethodField()
 
-    def get_model_type(self, obj):
+    # кешируем сериалайзеры чтоб быстро к ним обращаться
+    __cached_serializers = {
+        Note: NoteSerializer,
+        Advertisement: AdvertisementSerializer,
+        Achievement: AchievementSerializer,
+
+    }
+
+    def get_model_type(self, 
+                       obj: Alias.FeedEvent):
+        """
+            Выводим название модели
+        """
         return obj.__class__.__name__
 
-    def get_details(self, obj):
-        if isinstance(obj, Note):
-            return NoteSerializer(obj).data
+    def get_event_message(self,
+                          obj: Alias.FeedEvent):
+        """
+            Выводим текст события которое привязано к модели
+        """
+        obj_type = type(obj)
 
-        if isinstance(obj, Advertisement):
-            return AdvertisementSerializer(obj).data
+        if message := EventMessages.get(obj_type):
+            return message
 
-        if isinstance(obj, Achievement):
-            return AchievementSerializer(obj).data
+        raise NotCorrectFeedType
+
+    def get_details(self,
+                    obj: Alias.FeedEvent):
+        """
+            Обрабатываем данные самой модели
+        """
+        obj_type = type(obj)
+
+        if serializer := self.__cached_serializers.get(obj_type):
+            return serializer(obj).data
+
+        raise NotCorrectFeedType
 

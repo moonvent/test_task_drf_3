@@ -26,7 +26,8 @@ class Alias:
     """
         Алиасы типов, для более коротного и читаемого размещения типов
     """
-    FeedList = list[Note | Achievement | Advertisement]
+    FeedEvent = Note | Achievement | Advertisement
+    FeedList = list[FeedEvent]
 
 
 class ViewBodyDescription(str, 

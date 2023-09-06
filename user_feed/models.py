@@ -1,15 +1,11 @@
 from constants.user_feed.models import FieldLength, FoldersPath
 from django.db import models
-from django.contrib.auth.models import User as DjangoUser
+from django.contrib.auth.models import AbstractUser
 
 
-class User(models.Model):
+class User(AbstractUser):
     first_name = models.CharField(max_length=FieldLength.USER_FIRST_NAME)
     last_name = models.CharField(max_length=FieldLength.USER_LAST_NAME)
-    django_user = models.OneToOneField(DjangoUser,
-                                       on_delete=models.CASCADE)
-    last_login = models.DateTimeField(null=True, 
-                                      blank=True)
 
 
 class Note(models.Model):
