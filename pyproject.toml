@@ -10,6 +10,7 @@ packages = []
 python = "^3.11"
 pillow = "^10.0.0"
 django-debug-toolbar = "^4.2.0"
+drf-yasg = "^1.21.7"
 
 
 [tool.poetry.group.tests.dependencies]

@@ -1,14 +1,16 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.core.handlers.asgi import HttpResponse
 from django.core.handlers.wsgi import WSGIRequest
 from loguru import logger
 from rest_framework import generics
+from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotAuthenticated
-from constants.user_feed.views import Alias, QueryParam
+from constants.user_feed.views import Alias, OpenApiSchema, QueryParam, ViewBodyDescription
 from exceptions.user_feed.views import NotCorrectUserIdParam
 from services.user_feed.models import get_django_user, get_models_for_feed
 from user_feed.paginators import FeedPagination
 from user_feed.serializers import FeedSerializer
+from drf_yasg.utils import swagger_auto_schema
 
 
 class FeedView(generics.ListAPIView):
@@ -36,17 +38,26 @@ class FeedView(generics.ListAPIView):
         return feed
 
 
+@swagger_auto_schema(**OpenApiSchema.Auth)
+@api_view(['GET'])
 def auth_view(request: WSGIRequest) -> HttpResponse:
     """
         Ручка для быстрой авторизации
     """
     user_id = request.GET.get('user_id')
-    django_user = get_django_user(user_id=user_id)
+    
 
-    login(request, 
-          django_user)
+    if django_user := get_django_user(user_id=user_id):
 
-    return HttpResponse('Logged in')
+        if request.user.is_authenticated:
+            logout(request)
+
+        login(request, 
+              django_user)
+
+        return HttpResponse(ViewBodyDescription.Logged)
+
+    raise NotCorrectUserIdParam
 
 
 

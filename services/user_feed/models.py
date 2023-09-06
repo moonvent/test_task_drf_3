@@ -24,15 +24,16 @@ def get_models_for_feed(user_id: int,
     return feed
 
 
-def get_django_user(user_id: int) -> DjangoUser:
+def get_django_user(user_id: int) -> Optional[DjangoUser]:
     """
         Получение сущности пользователя из Джанго ауф системы
     """
-    django_user = (User
+    users = (User
         .objects
-        .get(id=user_id)
-        .django_user
+        .filter(id=user_id)
     )
 
-    return django_user
+    if users:
+        django_user = users.first()
+        return django_user
 

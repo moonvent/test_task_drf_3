@@ -6,8 +6,10 @@ from django.contrib.auth.models import User as DjangoUser
 class User(models.Model):
     first_name = models.CharField(max_length=FieldLength.USER_FIRST_NAME)
     last_name = models.CharField(max_length=FieldLength.USER_LAST_NAME)
-    django_user = models.ForeignKey(DjangoUser,
-                                    on_delete=models.CASCADE)
+    django_user = models.OneToOneField(DjangoUser,
+                                       on_delete=models.CASCADE)
+    last_login = models.DateTimeField(null=True, 
+                                      blank=True)
 
 
 class Note(models.Model):
@@ -26,7 +28,8 @@ class Achievement(models.Model):
     condition = models.TextField()
     icon = models.ImageField(upload_to=FoldersPath.ACHIEVEMENT_ICONS.value)
     user = models.ManyToManyField(User,
-                                  related_name='achievements')
+                                  related_name='achievements',
+                                  help_text='Данным полем создаем связть многие ко многим')
 
 
 class Advertisement(models.Model):
