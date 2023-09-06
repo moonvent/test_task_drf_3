@@ -5,7 +5,6 @@ from user_feed.models import Achievement, Advertisement, Note
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
-        fields = '__all__'
         fields = ('title',
                   'body',
                   'created_at'
@@ -15,7 +14,6 @@ class NoteSerializer(serializers.ModelSerializer):
 class AchievementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Achievement
-        # fields = '__all__'
         fields = ('title',
                   'condition',
                   'icon'
@@ -25,7 +23,6 @@ class AchievementSerializer(serializers.ModelSerializer):
 class AdvertisementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertisement
-        # fields = '__all__'
         fields = ('title',
                   'description',
                   'image',

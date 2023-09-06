@@ -12,10 +12,10 @@ def get_models_for_feed(user_id: int,
     filter_data_for_notes, filter_data_for_achievements = get_feed_filter_data(user_id=user_id,
                                                                                search=search)
 
-    notes = Note.objects.filter(**filter_data_for_notes)
-    
-    achievements = Achievement.objects.filter(**filter_data_for_achievements)
+    # для хайлоада я бы дополнительно накинул бы условия для выборки по активной пагинационной странице
 
+    notes = Note.objects.filter(**filter_data_for_notes)
+    achievements = Achievement.objects.filter(**filter_data_for_achievements)
     ads = Advertisement.objects.all()
 
     feed = get_sorted_feed(notes=notes,

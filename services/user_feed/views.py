@@ -17,11 +17,14 @@ def get_feed_filter_data(user_id: int,
     """
 
     if search:
+        # единственное что, какой* поиск нужен, ибо я подумал о wildcard а он же очень 
+        # до производительности жористый, но, тут нужно просто деталей поболее
+
         filter_data_for_notes = dict(title__icontains=search,
                                      user_id=user_id)
 
-        filter_data_for_achievements = dict(name__icontains=search,
-                                            user_id=user_id)
+        filter_data_for_achievements = dict(title__icontains=search,
+                                            user__id=user_id)
     else:
         filter_data_for_notes = dict(user_id=user_id)
         filter_data_for_achievements = dict(user__id=user_id)
