@@ -13,4 +13,7 @@ poetry.lock
 
 media/*
 
-*/__pycache__/*
+__pycache__
+
+logs/*
+!logs/__init__.py
