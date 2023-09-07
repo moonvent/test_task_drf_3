@@ -24,3 +24,7 @@ class FoldersPath(str,
     ACHIEVEMENT_ICONS = 'icons/'
     ADVERTISEMENT_IMAGES = 'ads/'
 
+
+CACHE_FEED_QUERY_SET_KEY = 'user_id={},search={}'
+# указываем время жизни кеша в секундах
+CACHE_TIMEOUT = 300

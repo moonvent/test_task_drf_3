@@ -1,7 +1,9 @@
 from typing import Optional
+from constants.user_feed.models import CACHE_FEED_QUERY_SET_KEY, CACHE_TIMEOUT
 from constants.user_feed.views import Alias
 from services.user_feed.views import get_feed_filter_data, get_sorted_feed
 from user_feed.models import Achievement, Advertisement, Note, User
+from django.core.cache import cache
 
 
 def get_models_for_feed(user_id: int,
@@ -9,18 +11,32 @@ def get_models_for_feed(user_id: int,
     """
         Получение данных для фида пользователя
     """
-    filter_data_for_notes, filter_data_for_achievements = get_feed_filter_data(user_id=user_id,
-                                                                               search=search)
+    
+    cache_key = CACHE_FEED_QUERY_SET_KEY.format(user_id, 
+                                                search)
 
-    # для хайлоада я бы дополнительно накинул бы условия для выборки по активной пагинационной странице
+    # реализовал простенькое хеширование для запроса
+    if cache_data := cache.get(cache_key):
+        feed = cache_data
 
-    notes = Note.objects.filter(**filter_data_for_notes)
-    achievements = Achievement.objects.filter(**filter_data_for_achievements)
-    ads = Advertisement.objects.all()
+    else:
+        filter_data_for_notes, filter_data_for_achievements = get_feed_filter_data(user_id=user_id,
+                                                                                   search=search)
 
-    feed = get_sorted_feed(notes=notes,
-                           achievements=achievements,
-                           ads=ads)
+        # для хайлоада я бы дополнительно накинул бы условия для выборки по активной пагинационной странице
+
+        notes = Note.objects.filter(**filter_data_for_notes)
+        achievements = Achievement.objects.filter(**filter_data_for_achievements)
+        ads = Advertisement.objects.all()
+
+        feed = get_sorted_feed(notes=notes,
+                               achievements=achievements,
+                               ads=ads)
+
+        cache.set(cache_key,
+                  feed,
+                  CACHE_TIMEOUT)
+
     return feed
 
 
