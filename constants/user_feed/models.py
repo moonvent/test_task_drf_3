@@ -27,4 +27,4 @@ class FoldersPath(str,
 
 CACHE_FEED_QUERY_SET_KEY = 'user_id={},search={}'
 # указываем время жизни кеша в секундах
-CACHE_TIMEOUT = 300
+CACHE_TIMEOUT = 60
