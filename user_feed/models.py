@@ -1,6 +1,7 @@
 from constants.user_feed.models import FieldLength, FoldersPath
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from polymorphic.models import PolymorphicModel
 
 
 class User(AbstractUser):
@@ -8,7 +9,11 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=FieldLength.USER_LAST_NAME)
 
 
-class Note(models.Model):
+class FeedElement(PolymorphicModel):
+    ...
+
+
+class Note(FeedElement):
     class Meta:
         ordering = ('-created_at',)
 
@@ -19,7 +24,7 @@ class Note(models.Model):
                              on_delete=models.CASCADE)
 
 
-class Achievement(models.Model):
+class Achievement(FeedElement):
     title = models.CharField(max_length=FieldLength.ACHIEVEMENT_TITLE)
     condition = models.TextField()
     icon = models.ImageField(upload_to=FoldersPath.ACHIEVEMENT_ICONS.value)
@@ -28,7 +33,7 @@ class Achievement(models.Model):
                                   help_text='Данным полем создаем связть многие ко многим')
 
 
-class Advertisement(models.Model):
+class Advertisement(FeedElement):
     class Meta:
         ordering = ('-published_at',)
 

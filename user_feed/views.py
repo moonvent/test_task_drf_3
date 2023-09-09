@@ -21,18 +21,20 @@ class FeedView(generics.ListAPIView):
     pagination_class = FeedPagination
 
     def get_queryset(self) -> Alias.FeedList:
-        if not self.request.user.is_authenticated:
+
+        auth_user = self.request.user
+        if not auth_user.is_authenticated:
             raise NotAuthenticated
 
         user_id = self.kwargs['pk']
 
-        if self.kwargs['pk'] != self.request.user.id:
+        if user_id != auth_user.id:
             raise NotCorrectUserIdParam
 
         search = self.request.query_params.get(QueryParam.Search)
 
-        feed = get_models_for_feed(user_id=user_id,
-                                   search=search)  
+        feed = get_models_for_feed(search=search,
+                                   user=auth_user)  
 
         return feed
 
